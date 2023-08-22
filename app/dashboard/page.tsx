@@ -49,7 +49,7 @@ export default function Dashboard() {
                 <div className='flex items-center md:flex-row flex-col justify-between w-full md:space-x-4 mb-8'>
                     <div className='bg-white md:w-1/3 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2'>
                         <h3 className='text-[#9AA8BD] mb-10'>Total Sales</h3>
-                        <h2 className='text-center font-bold text-3xl text-[#60A9CD]'>₦{totalSales.toLocaleString()}</h2>
+                        <h2 className='text-center font-bold text-3xl text-[#60A9CD]'>R{totalSales.toLocaleString()}</h2>
                     </div>
                     <div className='bg-white md:w-1/3 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2'>
                         <h3 className='text-[#9AA8BD] mb-10'>Products</h3>

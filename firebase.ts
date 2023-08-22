@@ -4,13 +4,12 @@ import { EmailAuthProvider } from "firebase/auth";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCtmI3jLzqDSr3UIwuUdBa5ocsN5vjzpW8",
-  authDomain: "stock-taking-19198.firebaseapp.com",
-  projectId: "stock-taking-19198",
-  storageBucket: "stock-taking-19198.appspot.com",
-  messagingSenderId: "228033001185",
-  appId: "1:228033001185:web:b2020053fb824a87d9a9a0",
-  measurementId: "G-79BQVKMPSR"
+  apiKey: "AIzaSyAP6qqtkgCl8_JAcT6yNKZZJ0YrMnhGWp8",
+  authDomain: "smallshop2627.firebaseapp.com",
+  projectId: "smallshop2627",
+  storageBucket: "smallshop2627.appspot.com",
+  messagingSenderId: "959721602134",
+  appId: "1:959721602134:web:548bb9e56ab538dd838ff7"
 };
 
 // Initialize Firebase
