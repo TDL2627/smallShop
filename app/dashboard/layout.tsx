@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Dashboard | InStock',
+  title: 'Dashboard | SmallShop',
   description: 'A stock taking application for shopping malls and stores.',
 }
 

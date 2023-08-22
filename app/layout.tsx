@@ -6,8 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 const inter = Raleway({ subsets: ["latin"]})
 
 export const metadata = {
-  title: 'InStock',
-  description: 'A stock taking application for shopping malls and stores.',
+  title: 'SmallShop',
+  description: 'An app for small shops.',
 }
 
 export default function RootLayout({
