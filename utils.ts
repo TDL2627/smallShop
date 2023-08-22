@@ -151,10 +151,10 @@ export const addCategory = async (name: string) => {
 }
 }
 
-export const addProduct = async (name: string, price: number, category: string) => {
+export const addProduct = async (name: string, price: number, category: string, quantity: number) => {
 	try {
 		await addDoc(collection(db, "products"), {
-			name, price, category
+			name, price, category, quantity
 		})
 		successMessage(`${name} product added! 🎉`)
 	}	
