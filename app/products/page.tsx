@@ -20,6 +20,8 @@ import {
   User,
   Item,
 } from "@/utils";
+import AddProduct from "./AddProduct";
+import EditProduct from "./EditProduct";
 
 interface Product {
   id: string;
@@ -32,19 +34,15 @@ interface Product {
 export default function Home() {
   const [user, setUser] = useState<User>();
   const router = useRouter();
-  const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState<string>("");
-  const [price, setPrice] = useState<number>(100);
-  const [quantity, setQuantity] = useState<number>(1);
-
-  const [category, setCategory] = useState<string>("select");
   const [products, setProducts] = useState([]);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [product, setProduct] = useState<any>(null);
 
   const isUserLoggedIn = useCallback(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser({ email: user.email, uid: user.uid });
-        getCategories(setCategories);
         getProducts(setProducts);
       } else {
         return router.push("/");
@@ -58,23 +56,12 @@ export default function Home() {
 
   if (!user?.email) return <Loading />;
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    addProduct(product, price, category, quantity);
-    setCategory("select");
-    setPrice(100);
-    setProduct("");
+  const toggleAdd = () => {
+    setOpenAddModal(!openAddModal);
   };
-
-  const handlePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value, 10);
-    setPrice(value);
+  const toggleEdit = () => {
+    setOpenEditModal(!openEditModal);
   };
-  const handleStock = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value, 10);
-    setQuantity(value);
-  };
-
   return (
     <main className="flex w-full min-h-[100vh] relative">
       <SideNav />
@@ -83,71 +70,24 @@ export default function Home() {
         <Header title="Products" />
 
         <section className="w-full mb-10">
-          <h3 className="text-lg mb-4">
+          <button
+            className="py-2 px-4 bg-green-500 text-white rounded"
+            onClick={() => {
+              setOpenAddModal(true);
+            }}
+          >
             Add Product{" "}
-            <span className="text-gray-500 text-sm">
-              (name, price,quantity, category)
-            </span>
-          </h3>
-          <form className="w-full" onSubmit={handleSubmit}>
-            <div className="flex items-center justify-between space-x-3 mb-4">
-              <input
-                className="border-b-[1px] px-4 py-2 w-1/3 rounded"
-                type="text"
-                placeholder="Product"
-                name="product"
-                id="product"
-                required
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-              />
-
-              <input
-                className="border-b-[1px] px-4 py-2 w-1/3 rounded"
-                type="number"
-                placeholder="Price"
-                name="price"
-                id="price"
-                required
-                value={price.toString()}
-                onChange={handlePrice}
-              />
-              <input
-                className="border-b-[1px] px-4 py-2 w-1/3 rounded"
-                type="number"
-                placeholder="Stock"
-                name="stock"
-                id="stock"
-                required
-                value={quantity.toString()}
-                onChange={handleStock}
-              />
-
-              <select
-                name="category"
-                className="border-b-[1px] px-4 py-2 w-1/3"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="select">Select Category</option>
-                {categories?.map((item: Item) => (
-                  <option value={item.name} key={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {category !== "select" ? (
-              <button className="py-2 px-4 bg-blue-500 text-white rounded">
-                ADD PRODUCT
-              </button>
-            ) : (
-              <p className="text-red-400 text-sm">
-                You need to pick a category
-              </p>
-            )}
-          </form>
+          </button>
+          {openAddModal && (
+            <>
+              <AddProduct toggle={toggleAdd} />
+            </>
+          )}
+          {openEditModal && (
+            <>
+              <EditProduct toggle={toggleEdit} product={product} />
+            </>
+          )}
         </section>
 
         <div className="w-full">
@@ -176,7 +116,10 @@ export default function Home() {
                       />
                       <MdOutlineModeEdit
                         className="text-3xl text-blue-500 cursor-pointer"
-                        onClick={() => deleteProduct(product.id, product.name)}
+                        onClick={() => {
+                          setProduct(product);
+                          toggleEdit();
+                        }}
                       />
                     </div>
                   </td>
