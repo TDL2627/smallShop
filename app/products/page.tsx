@@ -22,7 +22,8 @@ import {
 } from "@/utils";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
-
+import { useProductStore } from "../store";
+import Search from "./Search";
 interface Product {
   id: string;
   category: string;
@@ -38,23 +39,23 @@ export default function Home() {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [product, setProduct] = useState<any>(null);
+  const { filteredProducts } = useProductStore();
+  // const isUserLoggedIn = useCallback(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setUser({ email: user.email, uid: user.uid });
+  //       getProducts(setProducts);
+  //     } else {
+  //       return router.push("/");
+  //     }
+  //   });
+  // }, [router]);
 
-  const isUserLoggedIn = useCallback(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({ email: user.email, uid: user.uid });
-        getProducts(setProducts);
-      } else {
-        return router.push("/");
-      }
-    });
-  }, [router]);
+  // useEffect(() => {
+  //   isUserLoggedIn();
+  // }, [isUserLoggedIn]);
 
-  useEffect(() => {
-    isUserLoggedIn();
-  }, [isUserLoggedIn]);
-
-  if (!user?.email) return <Loading />;
+  // if (!user?.email) return <Loading />;
 
   const toggleAdd = () => {
     setOpenAddModal(!openAddModal);
@@ -62,14 +63,26 @@ export default function Home() {
   const toggleEdit = () => {
     setOpenEditModal(!openEditModal);
   };
+  useEffect(() => {
+    getProducts(setProducts);
+  }, []);
   return (
     <main className="flex w-full min-h-[100vh] relative">
       <SideNav />
 
       <div className="md:w-[85%] w-full py-4 px-6 min-h-[100vh] bg-[#f4f4f6]">
         <Header title="Products" />
-
-        <section className="w-full mb-10">
+        {openAddModal && (
+          <>
+            <AddProduct toggle={toggleAdd} />
+          </>
+        )}
+        {openEditModal && (
+          <>
+            <EditProduct toggle={toggleEdit} product={product} />
+          </>
+        )}
+        <div className="w-full mb-10 flex">
           <button
             className="py-2 px-4 bg-green-500 text-white rounded"
             onClick={() => {
@@ -78,17 +91,8 @@ export default function Home() {
           >
             Add Product{" "}
           </button>
-          {openAddModal && (
-            <>
-              <AddProduct toggle={toggleAdd} />
-            </>
-          )}
-          {openEditModal && (
-            <>
-              <EditProduct toggle={toggleEdit} product={product} />
-            </>
-          )}
-        </section>
+          <Search products={products} />
+        </div>
 
         <div className="w-full">
           <table className="w-full border-collapse table-auto">
@@ -102,29 +106,57 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {products?.map((product: Product) => (
-                <tr key={product.id} className="text-sm text-gray-500">
-                  <td>{product.name}</td>
-                  <td>{`R${product.price.toLocaleString()}`}</td>
-                  <td>{`${product?.quantity?.toLocaleString()}`}</td>
-                  <td>{product.category}</td>
-                  <td>
-                    <div className="flex w-full justify-between">
-                      <MdDeleteForever
-                        className="text-3xl text-red-500 cursor-pointer"
-                        onClick={() => deleteProduct(product.id, product.name)}
-                      />
-                      <MdOutlineModeEdit
-                        className="text-3xl text-blue-500 cursor-pointer"
-                        onClick={() => {
-                          setProduct(product);
-                          toggleEdit();
-                        }}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {filteredProducts.length !== 0
+                ? filteredProducts?.map((product: Product) => (
+                    <tr key={product.id} className="text-sm text-gray-500">
+                      <td>{product.name}</td>
+                      <td>{`R${product.price.toLocaleString()}`}</td>
+                      <td>{`${product?.quantity?.toLocaleString()}`}</td>
+                      <td>{product.category}</td>
+                      <td>
+                        <div className="flex w-full justify-between">
+                          <MdDeleteForever
+                            className="text-3xl text-red-500 cursor-pointer"
+                            onClick={() =>
+                              deleteProduct(product.id, product.name)
+                            }
+                          />
+                          <MdOutlineModeEdit
+                            className="text-3xl text-blue-500 cursor-pointer"
+                            onClick={() => {
+                              setProduct(product);
+                              toggleEdit();
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                : products?.map((product: Product) => (
+                    <tr key={product.id} className="text-sm text-gray-500">
+                      <td>{product.name}</td>
+                      <td>{`R${product.price.toLocaleString()}`}</td>
+                      <td>{`${product?.quantity?.toLocaleString()}`}</td>
+                      <td>{product.category}</td>
+                      <td>
+                        <div className="flex w-full justify-between">
+                          <MdDeleteForever
+                            className="text-3xl text-red-500 cursor-pointer"
+                            onClick={() =>
+                              deleteProduct(product.id, product.name)
+                            }
+                          />
+                          <MdOutlineModeEdit
+                            className="text-3xl text-blue-500 cursor-pointer"
+                            onClick={() => {
+                              setProduct(product);
+                              toggleEdit();
+                            }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
