@@ -39,6 +39,8 @@ export default function Home() {
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [product, setProduct] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<any>(true);
+
   const { filteredProducts, products, setProducts, setCategories } =
     useProductStore();
   // const isUserLoggedIn = useCallback(() => {
@@ -68,6 +70,16 @@ export default function Home() {
     getCategories(setCategories);
     getProducts(setProducts);
   }, []);
+  useEffect(() => {
+    if (products.length == 0) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }, [products]);
   return (
     <main className="flex w-full min-h-[100vh] relative">
       <SideNav />
@@ -200,6 +212,7 @@ export default function Home() {
                   ))}
             </tbody>
           </table>
+          {isLoading && <Loading />}
         </div>
       </div>
     </main>
