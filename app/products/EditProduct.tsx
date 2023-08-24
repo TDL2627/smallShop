@@ -17,7 +17,7 @@ const EditProduct = (payload: any) => {
   const [user, setUser] = useState<User>();
   const router = useRouter();
   const [categories, setCategories] = useState([]);
-  const [price, setPrice] = useState<number>(product.price);
+  const [price, setPrice] = useState<string>(product.price);
   const [quantity, setQuantity] = useState<number>(product.quantity);
   const [title, setTitle] = useState<string>(product.name);
 
@@ -47,8 +47,7 @@ const EditProduct = (payload: any) => {
   };
 
   const handlePrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value, 10);
-    setPrice(value);
+    setPrice(event.target.value);
   };
   const handleStock = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(event.target.value, 10);
@@ -60,7 +59,7 @@ const EditProduct = (payload: any) => {
       <div className=" w-full md:p-auto p-4 h-full dim absolute top-0 left-0 z-40 flex items-center justify-center">
         <div className="bg-white md:w-2/3 w-full p-6 rounded-lg shadow-lg overflow-y-auto">
           <AiFillCloseCircle
-            className="text-3xl cursor-pointer text-[#D64979]"
+            className="text-3xl cursor-pointer text-[#D64979] place-self-end float-right"
             onClick={() => {
               toggle();
             }}
@@ -84,12 +83,12 @@ const EditProduct = (payload: any) => {
 
               <input
                 className="border-[1px] p-2 md:w-1/3 w-full mb-4 rounded"
-                type="number"
+                type="text"
                 placeholder="Price"
                 name="price"
                 id="price"
                 required
-                value={price.toString()}
+                value={price}
                 onChange={handlePrice}
               />
               <p className="w-full md:text-center">Quantity</p>

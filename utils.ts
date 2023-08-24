@@ -168,7 +168,7 @@ export const addCategory = async (name: string) => {
 
 export const addProduct = async (
   name: string,
-  price: number,
+  price: string,
   category: string,
   quantity: number
 ) => {
@@ -187,7 +187,7 @@ export const addProduct = async (
 };
 export const editProduct = async (
   name: string,
-  price: number,
+  price: string,
   category: string,
   quantity: number,
   productId: string // Assuming productId is of type string
