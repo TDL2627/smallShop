@@ -171,13 +171,18 @@ export default function Home() {
                       <td className="px-6 py-4 md:py-2 whitespace-nowrap">
                         {product.category}
                       </td>
-                      <td className="px-6  whitespace-nowrap">
+                      <td className="px-6  ">
                         <div className="flex justify-between">
                           <MdDeleteForever
                             className="text-red-500 cursor-pointer"
-                            onClick={() =>
-                              deleteProduct(product.id, product.name)
-                            }
+                            onClick={() => {
+                              const shouldDelete = window.confirm(
+                                `Are you sure you want to delete ${product.name}?`
+                              );
+                              if (shouldDelete) {
+                                deleteProduct(product.id, product.name);
+                              }
+                            }}
                           />
                           <MdOutlineModeEdit
                             className="text-blue-500 cursor-pointer"
