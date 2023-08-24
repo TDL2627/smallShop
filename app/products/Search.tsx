@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useProductStore } from "../store";
-const Search = (props: any) => {
-  const { products } = props;
+const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { setFilteredProducts } = useProductStore();
+  const { setFilteredProducts, products } = useProductStore();
   const handleSearchChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -22,13 +21,13 @@ const Search = (props: any) => {
   }, [searchTerm]);
   return (
     <>
-        <input
-          className="outline-none border border-black rounded-sm w-full p-1 "
-          type="text"
-          placeholder="Search products..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
+      <input
+        className="outline-none border border-black rounded-sm w-full p-1 "
+        type="text"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
     </>
   );
 };

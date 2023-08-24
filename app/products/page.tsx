@@ -24,6 +24,7 @@ import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import { useProductStore } from "../store";
 import Search from "./Search";
+import Sort from "./Sort";
 interface Product {
   id: string;
   category: string;
@@ -35,11 +36,11 @@ interface Product {
 export default function Home() {
   const [user, setUser] = useState<User>();
   const router = useRouter();
-  const [products, setProducts] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [product, setProduct] = useState<any>(null);
-  const { filteredProducts } = useProductStore();
+  const { filteredProducts, products, setProducts, setCategories } =
+    useProductStore();
   // const isUserLoggedIn = useCallback(() => {
   //   onAuthStateChanged(auth, (user) => {
   //     if (user) {
@@ -64,6 +65,7 @@ export default function Home() {
     setOpenEditModal(!openEditModal);
   };
   useEffect(() => {
+    getCategories(setCategories);
     getProducts(setProducts);
   }, []);
   return (
@@ -91,8 +93,9 @@ export default function Home() {
           >
             Add Product{" "}
           </button>
-          <Search products={products} />
+          <Search />
         </div>
+        <Sort />
 
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
