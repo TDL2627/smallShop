@@ -22,15 +22,13 @@ const Search = (props: any) => {
   }, [searchTerm]);
   return (
     <>
-      <div>
         <input
-          className="outline-none border border-black rounded-sm "
+          className="outline-none border border-black rounded-sm w-full p-1 "
           type="text"
           placeholder="Search products..."
           value={searchTerm}
           onChange={handleSearchChange}
         />
-      </div>
     </>
   );
 };

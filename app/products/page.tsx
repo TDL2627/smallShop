@@ -82,7 +82,7 @@ export default function Home() {
             <EditProduct toggle={toggleEdit} product={product} />
           </>
         )}
-        <div className="w-full mb-10 flex justify-between">
+        <div className="w-full mb-10 grid grid-cols-1	 gap-4  md:grid-cols-2	 justify-between">
           <button
             className="py-2 px-4 bg-green-500 text-white rounded"
             onClick={() => {
