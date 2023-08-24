@@ -82,7 +82,7 @@ export default function Home() {
             <EditProduct toggle={toggleEdit} product={product} />
           </>
         )}
-        <div className="w-full mb-10 flex">
+        <div className="w-full mb-10 flex justify-between">
           <button
             className="py-2 px-4 bg-green-500 text-white rounded"
             onClick={() => {
@@ -94,35 +94,64 @@ export default function Home() {
           <Search products={products} />
         </div>
 
-        <div className="w-full">
-          <table className="w-full border-collapse table-auto">
-            <thead>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Category</th>
-                <th>Action</th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Price
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Quantity
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Category
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Action
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {filteredProducts.length !== 0
                 ? filteredProducts?.map((product: Product) => (
                     <tr key={product.id} className="text-sm text-gray-500">
-                      <td>{product.name}</td>
-                      <td>{`R${product.price.toLocaleString()}`}</td>
-                      <td>{`${product?.quantity?.toLocaleString()}`}</td>
-                      <td>{product.category}</td>
-                      <td>
-                        <div className="flex w-full justify-between">
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                        {product.name}
+                      </td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`R${product.price.toLocaleString()}`}</td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`${product?.quantity?.toLocaleString()}`}</td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                        {product.category}
+                      </td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                        <div className="flex space-x-2">
                           <MdDeleteForever
-                            className="text-3xl text-red-500 cursor-pointer"
+                            className="text-red-500 cursor-pointer"
                             onClick={() =>
                               deleteProduct(product.id, product.name)
                             }
                           />
                           <MdOutlineModeEdit
-                            className="text-3xl text-blue-500 cursor-pointer"
+                            className="text-blue-500 cursor-pointer"
                             onClick={() => {
                               setProduct(product);
                               toggleEdit();
@@ -134,20 +163,24 @@ export default function Home() {
                   ))
                 : products?.map((product: Product) => (
                     <tr key={product.id} className="text-sm text-gray-500">
-                      <td>{product.name}</td>
-                      <td>{`R${product.price.toLocaleString()}`}</td>
-                      <td>{`${product?.quantity?.toLocaleString()}`}</td>
-                      <td>{product.category}</td>
-                      <td>
-                        <div className="flex w-full justify-between">
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                        {product.name}
+                      </td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`R${product.price.toLocaleString()}`}</td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`${product?.quantity?.toLocaleString()}`}</td>
+                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                        {product.category}
+                      </td>
+                      <td className="px-6  whitespace-nowrap">
+                        <div className="flex justify-between">
                           <MdDeleteForever
-                            className="text-3xl text-red-500 cursor-pointer"
+                            className="text-red-500 cursor-pointer"
                             onClick={() =>
                               deleteProduct(product.id, product.name)
                             }
                           />
                           <MdOutlineModeEdit
-                            className="text-3xl text-blue-500 cursor-pointer"
+                            className="text-blue-500 cursor-pointer"
                             onClick={() => {
                               setProduct(product);
                               toggleEdit();

@@ -7,26 +7,24 @@ const Search = (props: any) => {
   const handleSearchChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
-  console.log(products, "aye pro");
   let arr: any = [];
-
-
   useEffect(() => {
-  
     if (products) {
-      arr = products.filter((product: any) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      arr = products.filter(
+        (product: any) =>
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     if (arr) {
       setFilteredProducts(arr);
     }
-
-  }, [products, searchTerm]);
+  }, [searchTerm]);
   return (
     <>
       <div>
         <input
+          className="outline-none border border-black rounded-sm "
           type="text"
           placeholder="Search products..."
           value={searchTerm}
