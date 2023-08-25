@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useProductStore } from "../store";
+import { getProducts } from "@/utils";
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const { setFilteredProducts, products } = useProductStore();
+  const { setProducts, products } = useProductStore();
   const handleSearchChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -15,8 +16,13 @@ const Search = () => {
           product.category.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    if (arr) {
-      setFilteredProducts(arr);
+    if (arr.length !== 0) {
+      setProducts(arr);
+    } else {
+      getProducts(setProducts);
+    }
+    if (searchTerm == "") {
+      getProducts(setProducts);
     }
   }, [searchTerm]);
   return (

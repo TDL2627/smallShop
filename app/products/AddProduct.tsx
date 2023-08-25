@@ -1,5 +1,5 @@
 "use client";
-import { AiFillCloseCircle } from "react-icons/ai"
+import { AiFillCloseCircle } from "react-icons/ai";
 import React, {
   FormEventHandler,
   useState,
@@ -43,10 +43,7 @@ const AddProduct = (payload: any) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     addProduct(title, price, category, quantity);
-    setCategory("select");
-    setPrice(1);
-    setQuantity(1);
-    setTitle("");
+
     toggle();
   };
 

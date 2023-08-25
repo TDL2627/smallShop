@@ -13,12 +13,10 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Loading from "../dashboard/Loading";
 import {
-  addProduct,
   deleteProduct,
   getCategories,
   getProducts,
   User,
-  Item,
 } from "@/utils";
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
@@ -80,6 +78,23 @@ export default function Home() {
       setIsLoading(false);
     }, 3000);
   }, [products]);
+  // pagination
+  const productsPerPage = 5; // Number of products to show per page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+  const paginate = (pageNumber: any) => {
+    setCurrentPage(pageNumber);
+  };
+  console.log(currentProducts, "aye");
+
   return (
     <main className="flex w-full min-h-[100vh] relative">
       <SideNav />
@@ -146,72 +161,65 @@ export default function Home() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredProducts.length !== 0
-                ? filteredProducts?.map((product: Product) => (
-                    <tr key={product.id} className="text-sm text-gray-500">
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
-                        {product.name}
-                      </td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`R${product.price.toLocaleString()}`}</td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`${product?.quantity?.toLocaleString()}`}</td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
-                        {product.category}
-                      </td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
-                        <div className="flex space-x-2">
-                          <MdDeleteForever
-                            className="text-red-500 cursor-pointer"
-                            onClick={() =>
-                              deleteProduct(product.id, product.name)
-                            }
-                          />
-                          <MdOutlineModeEdit
-                            className="text-blue-500 cursor-pointer"
-                            onClick={() => {
-                              setProduct(product);
-                              toggleEdit();
-                            }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                : products?.map((product: Product) => (
-                    <tr key={product.id} className="text-sm text-gray-500">
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
-                        {product.name}
-                      </td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`R${product.price.toLocaleString()}`}</td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`${product?.quantity?.toLocaleString()}`}</td>
-                      <td className="px-6 py-4 md:py-2 whitespace-nowrap">
-                        {product.category}
-                      </td>
-                      <td className="px-6  ">
-                        <div className="flex justify-between">
-                          <MdDeleteForever
-                            className="text-red-500 cursor-pointer"
-                            onClick={() => {
-                              const shouldDelete = window.confirm(
-                                `Are you sure you want to delete ${product.name}?`
-                              );
-                              if (shouldDelete) {
-                                deleteProduct(product.id, product.name);
-                              }
-                            }}
-                          />
-                          <MdOutlineModeEdit
-                            className="text-blue-500 cursor-pointer"
-                            onClick={() => {
-                              setProduct(product);
-                              toggleEdit();
-                            }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+              {currentProducts?.map((product: Product) => (
+                <tr key={product.id} className="text-sm text-gray-500">
+                  <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                    {product.name}
+                  </td>
+                  <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`R${product.price.toLocaleString()}`}</td>
+                  <td className="px-6 py-4 md:py-2 whitespace-nowrap">{`${product?.quantity?.toLocaleString()}`}</td>
+                  <td className="px-6 py-4 md:py-2 whitespace-nowrap">
+                    {product.category}
+                  </td>
+                  <td className="px-6  ">
+                    <div className="flex justify-between">
+                      <MdDeleteForever
+                        className="text-red-500 cursor-pointer"
+                        onClick={() => {
+                          const shouldDelete = window.confirm(
+                            `Are you sure you want to delete ${product.name}?`
+                          );
+                          if (shouldDelete) {
+                            deleteProduct(product.id, product.name);
+                          }
+                        }}
+                      />
+                      <MdOutlineModeEdit
+                        className="text-blue-500 cursor-pointer"
+                        onClick={() => {
+                          setProduct(product);
+                          toggleEdit();
+                        }}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          <div className="mt-4 flex justify-center">
+            <nav>
+              <ul className="pagination">
+                {Array.from({
+                  length: Math.ceil(
+                    filteredProducts.length / productsPerPage ||
+                      products.length / productsPerPage
+                  ),
+                }).map((_, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => paginate(index + 1)}
+                      className={`pagination-link ${
+                        currentPage === index + 1 ? "text-blue-500" : ""
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
           {isLoading && <Loading />}
         </div>
       </div>

@@ -3,7 +3,7 @@ import { useProductStore } from "../store";
 const Sort = () => {
   const [sortBy, setSortBy] = useState("name"); // Default sorting by name
   const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
-  const { setFilteredProducts, products } = useProductStore();
+  const { setProducts, products } = useProductStore();
 
   const handleSortChange = (event: any) => {
     const { value } = event.target;
@@ -30,7 +30,7 @@ const Sort = () => {
       });
     }
     if (arr) {
-      setFilteredProducts(arr);
+      setProducts(arr);
     }
   }, [sortBy, sortOrder]);
   return (
