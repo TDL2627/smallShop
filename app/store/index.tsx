@@ -1,2 +1,4 @@
 import { useStore as useProductStore } from "./products";
-export { useProductStore };
+import { useStore as useUserStore } from "./users";
+
+export { useProductStore, useUserStore };

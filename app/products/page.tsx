@@ -16,6 +16,7 @@ import {
   deleteProduct,
   getCategories,
   getProducts,
+  getUser,
   User,
 } from "@/utils";
 import AddProduct from "./AddProduct";
@@ -67,6 +68,9 @@ export default function Home() {
   useEffect(() => {
     getCategories(setCategories);
     getProducts(setProducts);
+    console.log("aye");
+    
+    getUser();
   }, []);
   useEffect(() => {
     if (products.length == 0) {

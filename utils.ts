@@ -1,10 +1,15 @@
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "./firebase";
 import { toast } from "react-toastify";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import {
   doc,
   deleteDoc,
+  setDoc,
   onSnapshot,
   collection,
   addDoc,
@@ -13,7 +18,7 @@ import {
   serverTimestamp,
   orderBy,
   Timestamp,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 import db from "./firebase";
 
@@ -103,7 +108,10 @@ export const LoginUser = (
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
+      console.log(user, "aye");
+
       successMessage("Authentication successful 🎉");
+
       router.push("/dashboard");
     })
     .catch((error) => {
@@ -111,7 +119,44 @@ export const LoginUser = (
       errorMessage("Incorrect Email/Password ❌");
     });
 };
+export const getUser = () => {
+  console.log(auth, "aye auth");
+};
+export const SignUpUser = (
+  email: string,
+  password: string,
+  store: string,
+  name: string,
+  role: string, // User role (e.g., "admin", "user")
+  router: AppRouterInstance
+) => {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      const uid = user.uid;
 
+      // Create a user document in Firestore with the provided user role
+      setDoc(doc(db, "users", `${uid}`), {
+        email,
+        name,
+        store,
+        role,
+      })
+        .then(() => {
+          console.log(`User document created for ${email} with role ${role}`);
+          successMessage("Registration successful 🎉");
+          router.push("/dashboard");
+        })
+        .catch((error) => {
+          console.error("Error creating user document:", error);
+          errorMessage("Registration failed ❌");
+        });
+    })
+    .catch((error) => {
+      console.error(error);
+      errorMessage("Registration failed ❌");
+    });
+};
 export const LogOut = (router: AppRouterInstance) => {
   signOut(auth)
     .then(() => {
