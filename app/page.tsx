@@ -1,10 +1,9 @@
-import Login from "./components/Login";
 
 export default function Home() {
   return (
     <>
-      <div>
-        <Login />
+      <div className="w-full h-screen grid justify-center items-center">
+        <h1 className="font-black text-7xl">Small Shop</h1>
       </div>
     </>
   );

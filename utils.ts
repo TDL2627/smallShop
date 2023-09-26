@@ -153,8 +153,27 @@ export const SignUpUser = (
         });
     })
     .catch((error) => {
-      console.error(error);
-      errorMessage("Registration failed ❌");
+      console.log(error);
+      if (error.code == "auth/email-already-in-use") {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            const uid = user.uid;
+            successMessage("Already signed up...");
+            setDoc(doc(db, "users", `${uid}`), {
+              email,
+              name,
+              store,
+              role,
+            });
+            router.push("/dashboard");
+          })
+          .catch((error) => {
+            console.error("Error creating user document:", error);
+          });
+      } else {
+        errorMessage("Registration failed ❌");
+      }
     });
 };
 export const LogOut = (router: AppRouterInstance) => {

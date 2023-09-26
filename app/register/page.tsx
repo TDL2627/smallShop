@@ -42,7 +42,7 @@ export default function Register() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@test.com"
+          placeholder="Email..."
         />
 
         <label htmlFor="password">Password</label>
@@ -54,7 +54,7 @@ export default function Register() {
           className="border-[1px] py-2 px-4 rounded mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="admin123"
+          placeholder="Password..."
         />
 
         <label htmlFor="store">Store Name</label>

@@ -30,7 +30,7 @@ export default function Login() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@test.com"
+          placeholder="Email..."
         />
         <label htmlFor="password">Password</label>
         <input
@@ -41,7 +41,7 @@ export default function Login() {
           className="border-[1px] py-2 px-4 rounded  mb-4"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="admin123"
+          placeholder="Password..."
         />
         <button
           type="submit"
