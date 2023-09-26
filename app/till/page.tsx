@@ -1,23 +1,31 @@
 "use client";
-import React, { FormEventHandler, useState } from "react";
+import React, { FormEventHandler, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { getProducts } from "@/utils";
+import { useProductStore } from "../store";
 export default function Till() {
   const [total, setTotal] = useState(0);
   const [cart, setCart] = useState<any>([]);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [cashPaid, setCashPaid] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+  const { products, setProducts } = useProductStore();
+  useEffect(() => {
+    getProducts(setProducts);
+  }, []);
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  console.log(products, "aye pra");
 
   const handleAddToCart = (product: any) => {
     setCart([...cart, product]);
-    setTotal(total + product.price);
+    setTotal(total + Number(product.price));
   };
 
   const handleRemoveFromCart = (product: any) => {
     const updatedCart = cart.filter((item: any) => item.id !== product.id);
     setCart(updatedCart);
-    setTotal(total - product.price);
+    setTotal(total - Number(product.price));
   };
 
   const handlePaymentMethodChange = (e: any) => {
@@ -45,12 +53,42 @@ export default function Till() {
 
     console.log("Cart items:", cart);
   };
+  const handleSearchInputChange = (e: any) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setSearchInput(searchTerm);
+
+    const filteredResults = products.filter((product: any) =>
+      product.name.toLowerCase().includes(searchTerm)
+    );
+    setFilteredProducts(filteredResults);
+  };
 
   return (
     <>
       <h2 className="w-full text-5xl font-bold text-center">Till</h2>
-      <div className="w-full flex">
-        <div>{/* select products and display products here */}</div>
+      <div className="w-full grid grid-cols-2 gap-4 px-4 pt-10">
+        <div>
+          <h3 className="text-xl font-semibold mb-2">Product Search:</h3>
+          <input
+            type="text"
+            className="border border-gray-300 rounded p-2 w-full"
+            placeholder="Search products..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
+          />
+          <ul>
+            {filteredProducts.map((product: any) => (
+              <li
+                key={product.id}
+                onClick={() => handleAddToCart(product)} // Add product to cart when clicked
+                className="cursor-pointer hover:bg-gray-100 p-2"
+              >
+                {product.name} - R{Number(product.price).toFixed(2)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="bg-white p-4 rounded shadow-md">
           <h2 className="text-2xl font-semibold mb-4">Checkout</h2>
           <div className="mb-4">
@@ -67,10 +105,10 @@ export default function Till() {
           <div className="mb-4">
             <h3 className="text-xl font-semibold mb-2">Cart:</h3>
             <ul>
-              {cart.map((product) => (
+              {cart.map((product: any) => (
                 <li key={product.id} className="flex justify-between mb-2">
                   <span>{product.name}</span>
-                  <span>${product.price.toFixed(2)}</span>
+                  <span>R{Number(product.price).toFixed(2)}</span>
                   <button
                     onClick={() => handleRemoveFromCart(product)}
                     className="text-red-600"
