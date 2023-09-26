@@ -12,23 +12,27 @@ const Navbar = () => {
     typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
   useEffect(() => {
-    if (!uid) {
+    if (user == null) {
       getUser(setUser);
     }
   }, []);
   useEffect(() => {
-
     if (pathname !== "/register" && pathname !== "/login") {
       if (!uid) {
         router.push("/");
       }
     }
-    if (pathname == "/register" || pathname == "/login") {
-        if (uid) {
-          router.push("/dashboard");
-        }
+    if (pathname == "/register" || pathname == "/login" || pathname == "/") {
+      if (uid && user.role == "owner") {
+        router.push("/dashboard");
       }
-  }, [pathname, uid]);
+      if (uid && user.role == "teller") {
+        router.push("/till");
+      }
+    }
+    console.log(user,"aye");
+    
+  }, [pathname, uid, user]);
 
   return <div></div>;
 };

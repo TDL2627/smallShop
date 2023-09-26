@@ -9,7 +9,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [store, setStore] = useState("");
-  const [role, setRole] = useState<any>(""); // Set a default role
+  const [role, setRole] = useState<any>("teller"); // Set a default role
   const router = useRouter();
 
   const handleSubmit = (e: any) => {

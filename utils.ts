@@ -101,19 +101,29 @@ export const errorMessage = (message: string) => {
   });
 };
 
-export const LoginUser = (
+export const LoginUser = async (
   email: string,
   password: string,
   router: AppRouterInstance
 ) => {
   signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
       console.log(user, "aye");
+      const uid: any = auth?.currentUser?.uid;
+
+      localStorage.setItem("userId", uid);
 
       successMessage("Authentication successful 🎉");
-
-      router.push("/dashboard");
+      const docRef = doc(db, "users", `${uid}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        if (docSnap.data().role == "owner") {
+          router.push("/dashboard");
+        } else {
+          router.push("/till");
+        }
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -122,15 +132,13 @@ export const LoginUser = (
 };
 export const getUser = async (setUser: any) => {
   console.log(auth, "aye autg");
-  if (auth) {
-    const uid: any = auth?.currentUser?.uid;
+  const uid =
+    typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+  if (uid) {
     const docRef = doc(db, "users", `${uid}`);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("aye data:", docSnap.data());
-      setUser(docSnap.data())
-      localStorage.setItem('userId', uid);
-
+      setUser(docSnap.data());
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
@@ -159,8 +167,14 @@ export const SignUpUser = (
       })
         .then(() => {
           console.log(`User document created for ${email} with role ${role}`);
+          localStorage.setItem("userId", uid);
+
           successMessage("Registration successful 🎉");
-          router.push("/dashboard");
+          if (role == "owner") {
+            router.push("/dashboard");
+          } else {
+            router.push("/till");
+          }
         })
         .catch((error) => {
           console.error("Error creating user document:", error);
@@ -175,13 +189,19 @@ export const SignUpUser = (
             const user = userCredential.user;
             const uid = user.uid;
             successMessage("Already signed up...");
+            localStorage.setItem("userId", uid);
+
             setDoc(doc(db, "users", `${uid}`), {
               email,
               name,
               store,
               role,
             });
-            router.push("/dashboard");
+            if (role == "owner") {
+              router.push("/dashboard");
+            } else {
+              router.push("/till");
+            }
           })
           .catch((error) => {
             console.error("Error creating user document:", error);
@@ -195,6 +215,7 @@ export const LogOut = (router: AppRouterInstance) => {
   signOut(auth)
     .then(() => {
       successMessage("Logout successful! 🎉");
+      localStorage.clear();
       router.push("/");
     })
     .catch((error) => {
