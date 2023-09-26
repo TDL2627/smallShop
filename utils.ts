@@ -19,6 +19,7 @@ import {
   orderBy,
   Timestamp,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import db from "./firebase";
 
@@ -119,8 +120,22 @@ export const LoginUser = (
       errorMessage("Incorrect Email/Password ❌");
     });
 };
-export const getUser = () => {
-  console.log(auth, "aye auth");
+export const getUser = async (setUser: any) => {
+  console.log(auth, "aye autg");
+  if (auth) {
+    const uid: any = auth?.currentUser?.uid;
+    const docRef = doc(db, "users", `${uid}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("aye data:", docSnap.data());
+      setUser(docSnap.data())
+      localStorage.setItem('userId', uid);
+
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
 };
 export const SignUpUser = (
   email: string,

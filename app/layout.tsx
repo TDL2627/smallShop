@@ -2,7 +2,7 @@ import './globals.css'
 import { Raleway } from 'next/font/google'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Navbar from './components/Navbar';
 const inter = Raleway({ subsets: ["latin"]})
 
 export const metadata = {
@@ -18,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Navbar/>
         {children}
             <ToastContainer />
       </body>

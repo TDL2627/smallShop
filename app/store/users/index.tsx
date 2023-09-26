@@ -7,13 +7,14 @@ interface IUsers {
 
 export const useStore = create<IUsers>()((set, get) => ({
   user: null,
- 
+
   setUser: async (payload) => {
     try {
+      console.log(payload, "aye pay");
+
       set({ user: payload });
     } catch (error: any) {
       console.error(error);
     }
   },
- 
 }));
