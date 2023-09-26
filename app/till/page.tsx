@@ -15,7 +15,6 @@ export default function Till() {
     getProducts(setProducts);
   }, []);
   const [filteredProducts, setFilteredProducts] = useState(products);
-  console.log(products, "aye pra");
 
   const handleAddToCart = (product: any) => {
     setCart([...cart, product]);
@@ -80,7 +79,7 @@ export default function Till() {
             {filteredProducts.map((product: any) => (
               <li
                 key={product.id}
-                onClick={() => handleAddToCart(product)} // Add product to cart when clicked
+                onClick={() => handleAddToCart(product)} 
                 className="cursor-pointer hover:bg-gray-100 p-2"
               >
                 {product.name} - R{Number(product.price).toFixed(2)}
@@ -142,7 +141,7 @@ export default function Till() {
             )}
             <button
               onClick={handleCheckout}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
             >
               Checkout
             </button>

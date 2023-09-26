@@ -17,21 +17,23 @@ const Navbar = () => {
     }
   }, []);
   useEffect(() => {
-    if (pathname !== "/register" && pathname !== "/login") {
-      if (!uid) {
-        router.push("/");
+    if (pathname === "/register" || pathname === "/login") {
+      return; // No redirection needed for these routes
+    }
+
+    if (!uid) {
+      router.push("/");
+    } else {
+      if (user) {
+        if (user.role === "owner") {
+          router.push("/dashboard");
+        } else if (user.role === "teller" && pathname !== "/till") {
+          router.push("/till");
+        }
       }
     }
-    if (pathname == "/register" || pathname == "/login" || pathname == "/") {
-      if (uid && user.role == "owner") {
-        router.push("/dashboard");
-      }
-      if (uid && user.role == "teller") {
-        router.push("/till");
-      }
-    }
-    console.log(user,"aye");
-    
+
+    console.log(user, "aye");
   }, [pathname, uid, user]);
 
   return <div></div>;
