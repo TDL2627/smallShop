@@ -15,17 +15,17 @@ export default function Till() {
     getProducts(setProducts);
   }, []);
   const [filteredProducts, setFilteredProducts] = useState(products);
-const availableProducts = products.filter((product: any) => product.quantity >= 1)
+  const availableProducts = products.filter(
+    (product: any) => product.quantity >= 1
+  );
 
   const handleAddToCart = (product: any) => {
-    setCart([...cart, product]);
-    setTotal(total + Number(product.price));
+    setCart([...cart, { selectedQuantity: 1, ...product }]);
   };
 
   const handleRemoveFromCart = (product: any) => {
     const updatedCart = cart.filter((item: any) => item.id !== product.id);
     setCart(updatedCart);
-    setTotal(total - Number(product.price));
   };
 
   const handlePaymentMethodChange = (e: any) => {
@@ -57,17 +57,36 @@ const availableProducts = products.filter((product: any) => product.quantity >= 
     const searchTerm = e.target.value.toLowerCase();
     setSearchInput(searchTerm);
 
-    const filteredResults = availableProducts.filter((product: any) => 
-        product.name.toLowerCase().includes(searchTerm)
+    const filteredResults = availableProducts.filter((product: any) =>
+      product.name.toLowerCase().includes(searchTerm)
     );
     setFilteredProducts(filteredResults);
   };
+  const handleQuantityChange = (product: any, newQuantity: any) => {
+    const updatedCart = cart.map((item: any) => {
+      if (item.id === product.id) {
+        return { ...item, selectedQuantity: parseInt(newQuantity, 10) };
+      }
+      return item;
+    });
+
+    setCart(updatedCart);
+  };
+
   useEffect(() => {
     if (searchInput == "") {
       setFilteredProducts(null);
     }
-    console.log(cashPaid, "aye cahs");
   }, [searchInput]);
+
+  useEffect(() => {
+    // Recalculate the total based on the updated quantities
+    const newTotal = cart.reduce(
+      (acc: any, item: any) => acc + item.price * item.selectedQuantity,
+      0
+    );
+    setTotal(newTotal);
+  }, [cart]);
   return (
     <div className="bg-gray-100 min-h-screen">
       <h2 className="text-5xl font-bold text-center py-8">Till</h2>
@@ -113,14 +132,40 @@ const availableProducts = products.filter((product: any) => product.quantity >= 
             <ul>
               {cart.map((product: any) => (
                 <li key={product.id} className="flex justify-between mb-2">
-                  <span>{product.name}</span>
-                  <span>R{Number(product.price).toFixed(2)}</span>
-                  <button
-                    onClick={() => handleRemoveFromCart(product)}
-                    className="text-red-600"
-                  >
-                    Remove
-                  </button>
+                  <div>
+                    <span>{product.name}</span>
+                    <span className="ml-4">
+                      R{Number(product.price).toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <select
+                      value={product.selectedQuantity}
+                      onChange={(e) =>
+                        handleQuantityChange(product, e.target.value)
+                      }
+                      className="border border-gray-300 rounded p-2 w-16"
+                    >
+                      {}
+                      {(() => {
+                        const options = [];
+                        for (let i = 1; i <= product.quantity; i++) {
+                          options.push(
+                            <option key={i} value={i}>
+                              {i}
+                            </option>
+                          );
+                        }
+                        return options;
+                      })()}
+                    </select>
+                    <button
+                      onClick={() => handleRemoveFromCart(product)}
+                      className="text-red-600 ml-2"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -148,7 +193,8 @@ const availableProducts = products.filter((product: any) => product.quantity >= 
             )}
             <button
               onClick={handleCheckout}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              disabled={cashPaid == 0}
+              className={` ${cashPaid == 0 ? "bg-gray-500":"bg-green-500"} text-white px-4 py-2 rounded `}
             >
               Checkout
             </button>
