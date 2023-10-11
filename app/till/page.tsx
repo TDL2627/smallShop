@@ -15,6 +15,7 @@ export default function Till() {
     getProducts(setProducts);
   }, []);
   const [filteredProducts, setFilteredProducts] = useState(products);
+  
 
   const handleAddToCart = (product: any) => {
     setCart([...cart, product]);
@@ -36,7 +37,7 @@ export default function Till() {
   };
 
   const calculateChange = () => {
-    return cashPaid - total;
+    return Number(cashPaid) - total;
   };
 
   const handleCheckout = () => {
@@ -46,7 +47,7 @@ export default function Till() {
     console.log("Total amount:", total);
 
     if (paymentMethod === "cash") {
-      console.log("Cash Paid:", cashPaid.toFixed(2));
+      console.log("Cash Paid:", Number(cashPaid).toFixed(2));
       console.log("Change:", calculateChange().toFixed(2));
     }
 
@@ -61,12 +62,17 @@ export default function Till() {
     );
     setFilteredProducts(filteredResults);
   };
-
+  useEffect(() => {
+    if (searchInput == "") {
+      setFilteredProducts(null);
+    }
+    console.log(cashPaid, "aye cahs");
+  }, [searchInput]);
   return (
     <>
       <h2 className="w-full text-5xl font-bold text-center">Till</h2>
-      <div className="w-full grid grid-cols-2 gap-4 px-4 pt-10">
-        <div>
+      <div className="w-full grid lg:grid-cols-2 gap-4 px-4 pt-10">
+        <div className="lg:block sticky top-10">
           <h3 className="text-xl font-semibold mb-2">Product Search:</h3>
           <input
             type="text"
@@ -76,15 +82,16 @@ export default function Till() {
             onChange={handleSearchInputChange}
           />
           <ul>
-            {filteredProducts.map((product: any) => (
-              <li
-                key={product.id}
-                onClick={() => handleAddToCart(product)} 
-                className="cursor-pointer hover:bg-gray-100 p-2"
-              >
-                {product.name} - R{Number(product.price).toFixed(2)}
-              </li>
-            ))}
+            {filteredProducts &&
+              filteredProducts.map((product: any) => (
+                <li
+                  key={product.id}
+                  onClick={() => handleAddToCart(product)}
+                  className="cursor-pointer hover:bg-gray-100 p-2"
+                >
+                  {product.name} - R{Number(product.price).toFixed(2)}
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -97,7 +104,7 @@ export default function Till() {
               value={paymentMethod}
               onChange={handlePaymentMethodChange}
             >
-              <option value="credit_card">Credit Card</option>
+              <option value="card">Card</option>
               <option value="cash">Cash</option>
             </select>
           </div>
@@ -118,23 +125,23 @@ export default function Till() {
               ))}
             </ul>
           </div>
-          {paymentMethod === "cash" && (
-            <div className="mb-4">
-              <label className="block text-gray-700">Cash Paid:</label>
-              <input
-                type="number"
-                step="0.01"
-                className="border border-gray-300 rounded p-2 w-full"
-                value={cashPaid}
-                onChange={handleCashPaidChange}
-              />
-            </div>
-          )}
+
+          <div className="mb-4">
+            <label className="block text-gray-700">Cash Paid:</label>
+            <input
+              type="number"
+              step="0.01"
+              className="border border-gray-300 rounded p-2 w-full"
+              value={cashPaid}
+              onChange={handleCashPaidChange}
+            />
+          </div>
+
           <div className="mb-4">
             <p className="text-xl font-semibold mb-2">
               Total: R{total.toFixed(2)}
             </p>
-            {paymentMethod === "cash" && (
+            {cashPaid !== 0 && !isNaN(cashPaid) && (
               <p className="text-xl font-semibold mb-2">
                 Change: R{calculateChange().toFixed(2)}
               </p>

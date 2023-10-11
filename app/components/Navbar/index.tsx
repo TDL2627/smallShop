@@ -27,7 +27,7 @@ const Navbar = () => {
       if (user) {
         if (user.role === "owner") {
           router.push("/dashboard");
-        } else if (user.role === "teller" && pathname !== "/till") {
+        } else if (user.role === "teller") {
           router.push("/till");
         }
       }
