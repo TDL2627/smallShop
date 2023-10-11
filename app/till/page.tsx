@@ -15,7 +15,7 @@ export default function Till() {
     getProducts(setProducts);
   }, []);
   const [filteredProducts, setFilteredProducts] = useState(products);
-  
+const availableProducts = products.filter((product: any) => product.quantity >= 1)
 
   const handleAddToCart = (product: any) => {
     setCart([...cart, product]);
@@ -57,8 +57,8 @@ export default function Till() {
     const searchTerm = e.target.value.toLowerCase();
     setSearchInput(searchTerm);
 
-    const filteredResults = products.filter((product: any) =>
-      product.name.toLowerCase().includes(searchTerm)
+    const filteredResults = availableProducts.filter((product: any) => 
+        product.name.toLowerCase().includes(searchTerm)
     );
     setFilteredProducts(filteredResults);
   };
@@ -69,9 +69,9 @@ export default function Till() {
     console.log(cashPaid, "aye cahs");
   }, [searchInput]);
   return (
-    <>
-      <h2 className="w-full text-5xl font-bold text-center">Till</h2>
-      <div className="w-full grid lg:grid-cols-2 gap-4 px-4 pt-10">
+    <div className="bg-gray-100 min-h-screen">
+      <h2 className="text-5xl font-bold text-center py-8">Till</h2>
+      <div className="container mx-auto grid lg:grid-cols-2 gap-4 px-4 pt-10">
         <div className="lg:block sticky top-10">
           <h3 className="text-xl font-semibold mb-2">Product Search:</h3>
           <input
@@ -155,6 +155,6 @@ export default function Till() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
