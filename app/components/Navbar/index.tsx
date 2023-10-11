@@ -20,20 +20,13 @@ const Navbar = () => {
     if (pathname === "/register" || pathname === "/login") {
       return; // No redirection needed for these routes
     }
-
     if (!uid) {
       router.push("/");
     } else {
-      if (user) {
-        if (user.role === "owner") {
-          router.push("/dashboard");
-        } else if (user.role === "teller") {
-          router.push("/till");
-        }
+      if (user && user.role === "teller") {
+        router.push("/till");
       }
     }
-
-    console.log(user, "aye");
   }, [pathname, uid, user]);
 
   return <div></div>;
