@@ -54,13 +54,13 @@ export default function Dashboard() {
         <Header title="Dashboard" />
 
         <div className="flex items-center md:flex-row flex-col justify-between w-full md:space-x-4 mb-8">
-          <div className="bg-white md:w-1/3 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2">
+          <div className="bg-white md:w-1/2 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2">
             <h3 className="text-[#9AA8BD] mb-10">Total Sales</h3>
             <h2 className="text-center font-bold text-3xl text-[#60A9CD]">
               R{totalSales.toLocaleString()}
             </h2>
           </div>
-          <div className="bg-white md:w-1/3 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2">
+          <div className="bg-white md:w-1/2 w-full h-[200px] shadow rounded p-3 hover:shadow-lg md:my-auto my-2">
             <h3 className="text-[#9AA8BD] mb-10">Products</h3>
             <h2 className="text-center font-bold text-3xl text-[#8FCA37]">
               {products.length}
@@ -68,7 +68,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="w-full min-h-[30vh]">
+        {/* <div className="w-full min-h-[30vh]">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl">Recent Sales</h3>
             <button
@@ -96,9 +96,9 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
-      {addNew && <AddNew setAddNew={setAddNew} productsArray={products} />}
+      {/* {addNew && <AddNew setAddNew={setAddNew} productsArray={products} />} */}
     </main>
   );
 }

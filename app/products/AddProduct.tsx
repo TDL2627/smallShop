@@ -11,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import Loading from "../dashboard/Loading";
 import { addProduct, getProducts, User, Item } from "@/utils";
+import { categories } from "../categories/type";
 
 const AddProduct = (payload: any) => {
   const { toggle } = payload;
@@ -19,6 +20,7 @@ const AddProduct = (payload: any) => {
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [title, setTitle] = useState<string>("");
+  
 
   const [category, setCategory] = useState<string>("select");
 
@@ -112,7 +114,10 @@ const AddProduct = (payload: any) => {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="select">Select Category</option>
+                <option value="any">Select Category</option>
+                {categories.map((item: string) => (
+                  <option value={`${item}`} >{item}</option>
+                ))}
               </select>
               <button className="py-2 px-4 bg-green-500 text-white rounded md:w-1/3 w-full ">
                 ADD
