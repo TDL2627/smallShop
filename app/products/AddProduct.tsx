@@ -22,7 +22,7 @@ const AddProduct = (payload: any) => {
   const [title, setTitle] = useState<string>("");
   
 
-  const [category, setCategory] = useState<string>("select");
+  const [category, setCategory] = useState<string>("any");
 
   const isUserLoggedIn = useCallback(() => {
     onAuthStateChanged(auth, (user) => {

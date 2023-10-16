@@ -224,7 +224,6 @@ export const LogOut = (router: AppRouterInstance) => {
     });
 };
 
-
 // Create a store and add a product to it
 export const addProduct = async (
   productName: string,
@@ -247,7 +246,7 @@ export const addProduct = async (
     successMessage(`${productName} product added to store! 🎉`);
   } catch (err) {
     errorMessage("Error! ❌");
-    console.error(err,"aye error");
+    console.error(err, "aye error");
   }
 };
 
@@ -257,7 +256,7 @@ export const editProduct = async (
   price: string,
   category: string,
   quantity: string,
-  productId: string,
+  productId: string
 ) => {
   try {
     const storeRef = doc(db, "stores", "0000001");
@@ -297,10 +296,7 @@ export const getProducts = async (setProducts: any) => {
 };
 
 // Delete a product from a store
-export const deleteProduct = async (
-  productId: string,
-  productName: string
-) => {
+export const deleteProduct = async (productId: string, productName: string) => {
   try {
     const storeRef = doc(db, "stores", "0000001");
     const productRef = doc(storeRef, "products", productId);
@@ -313,23 +309,20 @@ export const deleteProduct = async (
   }
 };
 
-export const addSales = async (
-  customerName: string,
-  customerEmail: string,
-  products: Items[],
-  totalAmount: number,
-  setAddNew: any
-) => {
+export const newSale = async (products: Items[], totalAmount: number) => {
   try {
-    await addDoc(collection(db, "sales"), {
-      customerName,
-      customerEmail,
+    const storeRef = doc(db, "stores", "0000001");
+    const storeSalesRef: any = collection(storeRef, "sales");
+
+    const saleData = {
       products,
       totalAmount,
       timestamp: serverTimestamp(),
-    });
-    successMessage("Sales recorded! 🎉");
-    setAddNew(false);
+    };
+
+    await addDoc(storeSalesRef, saleData);
+
+    successMessage("Sale successfull 🎉");
   } catch (err) {
     console.error(err);
     errorMessage("Error! Try again ❌");
@@ -338,8 +331,9 @@ export const addSales = async (
 
 export const getSales = async (setSales: any) => {
   try {
-    const docRef = collection(db, "sales");
-    const q = query(docRef, orderBy("timestamp"));
+    const storeRef = doc(db, "stores", "0000001");
+    const storeSalesRef: any = collection(storeRef, "sales");
+    const q = query(storeSalesRef, orderBy("timestamp"));
     onSnapshot(q, (snapshot) => {
       const docs: any = [];
       snapshot.forEach((d: any) => {
@@ -355,7 +349,9 @@ export const getSales = async (setSales: any) => {
 
 export const getTotalSales = async (setTotalSales: any) => {
   try {
-    const unsub = onSnapshot(collection(db, "sales"), (doc) => {
+    const storeRef = doc(db, "stores", "0000001");
+    const storeSalesRef: any = collection(storeRef, "sales");
+    const unsub = onSnapshot(storeSalesRef, (doc: any) => {
       let totalSales: number = 0;
       doc.forEach((d: any) => {
         totalSales += d.data().totalAmount;
@@ -377,9 +373,10 @@ export const getSalesForDay = async (date: Date | null, setSales: any) => {
       const startDate = new Date(year, month, day, 0, 0, 0);
       const endDate = new Date(year, month, day, 23, 59, 59);
 
-      const docRef = collection(db, "sales");
+      const storeRef = doc(db, "stores", "0000001");
+      const storeSalesRef: any = collection(storeRef, "sales");
       const q = query(
-        docRef,
+        storeSalesRef,
         orderBy("timestamp"),
         where("timestamp", ">=", Timestamp.fromDate(startDate)),
         where("timestamp", "<=", Timestamp.fromDate(endDate))

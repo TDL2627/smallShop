@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useCallback, useEffect } from "react";
-import AddNew from "./AddNew";
 import SideNav from "./SideNav";
 import Link from "next/link";
 import Header from "./Header";
@@ -17,11 +16,9 @@ import {
 } from "@/utils";
 
 export default function Dashboard() {
-  const [addNew, setAddNew] = useState<boolean>(false);
   const [products, setProducts] = useState([]);
   const [totalSales, setTotalSales] = useState<number>(0);
   const [sales, setSales] = useState<Sales[]>([]);
-  const openModal = () => setAddNew(true);
   const [user, setUser] = useState<User>();
   const router = useRouter();
 
@@ -98,7 +95,6 @@ export default function Dashboard() {
           </div>
         </div> */}
       </div>
-      {/* {addNew && <AddNew setAddNew={setAddNew} productsArray={products} />} */}
     </main>
   );
 }

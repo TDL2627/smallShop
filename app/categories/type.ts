@@ -5,5 +5,6 @@ export const categories: any = [
   "Chocolate",
   "Sweets",
   "Detergents",
+  "Food",
   "Other",
 ];
