@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import Loading from "../dashboard/Loading";
 import {
   deleteProduct,
-  getCategories,
   getProducts,
   User,
 } from "@/utils";
@@ -39,7 +38,7 @@ export default function Home() {
   const [product, setProduct] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<any>(true);
 
-  const { filteredProducts, products, setProducts, setCategories } =
+  const { filteredProducts, products, setProducts } =
     useProductStore();
   // const isUserLoggedIn = useCallback(() => {
   //   onAuthStateChanged(auth, (user) => {
@@ -65,7 +64,6 @@ export default function Home() {
     setOpenEditModal(!openEditModal);
   };
   useEffect(() => {
-    getCategories(setCategories);
     getProducts(setProducts);
   }, []);
   useEffect(() => {

@@ -19,6 +19,7 @@ import {
   orderBy,
   Timestamp,
   updateDoc,
+  getDocs,
   getDoc,
 } from "firebase/firestore";
 import db from "./firebase";
@@ -223,112 +224,92 @@ export const LogOut = (router: AppRouterInstance) => {
     });
 };
 
-export const getCategories = async (setCategories: any) => {
-  try {
-    const unsub = onSnapshot(collection(db, "categories"), (doc) => {
-      const docs: any = [];
-      doc.forEach((d: any) => {
-        docs.push({ ...d.data(), id: d.id });
-      });
-      setCategories(docs);
-    });
-  } catch (err) {
-    console.error(err);
-    setCategories([]);
-  }
-};
 
-export const deleteCategory = async (id: string, name: string) => {
-  try {
-    await deleteDoc(doc(db, "categories", id));
-    const q = query(collection(db, "products"), where("category", "==", name));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      querySnapshot.forEach((document) => {
-        deleteDoc(doc(db, "products", document.id));
-      });
-    });
-    successMessage(`${name} category deleted 🎉`);
-  } catch (err) {
-    errorMessage("Encountered an error ❌");
-    console.log(err);
-  }
-};
-
-export const addCategory = async (name: string) => {
-  try {
-    await addDoc(collection(db, "categories"), {
-      name,
-    });
-    successMessage(`${name} category added! 🎉`);
-  } catch (err) {
-    errorMessage("Error! ❌");
-    console.error(err);
-  }
-};
-
+// Create a store and add a product to it
 export const addProduct = async (
-  name: string,
+  productName: string,
   price: string,
   category: string,
   quantity: number
 ) => {
   try {
-    await addDoc(collection(db, "products"), {
-      name,
+    const storeRef = doc(db, "stores", "0000001");
+    const storeProductsRef: any = collection(storeRef, "products");
+
+    const productData = {
+      name: productName,
       price,
       category,
       quantity,
-    });
-    successMessage(`${name} product added! 🎉`);
+    };
+
+    await setDoc(storeProductsRef, productData);
+    successMessage(`${productName} product added to store! 🎉`);
   } catch (err) {
     errorMessage("Error! ❌");
     console.error(err);
   }
 };
+
+// Edit a product within a store
 export const editProduct = async (
-  name: string,
+  productId: string,
+  productName: string,
   price: string,
   category: string,
-  quantity: number,
-  productId: string // Assuming productId is of type string
+  quantity: number
 ) => {
   try {
-    const productRef = doc(db, "products", productId); // Reference to the specific product document
-    await updateDoc(productRef, {
-      name,
+    const storeRef = doc(db, "stores", "0000001");
+    const productRef = doc(storeRef, "products", productId);
+
+    const productData = {
+      name: productName,
       price,
       category,
       quantity,
-    });
-    successMessage(`${name} product edited! 🎉`);
+    };
+
+    await setDoc(productRef, productData);
+    successMessage(`${productName} product edited! 🎉`);
   } catch (err) {
     errorMessage("Error editing product! ❌");
     console.error(err);
   }
 };
 
+// Get products from a store
 export const getProducts = async (setProducts: any) => {
   try {
-    const unsub = onSnapshot(collection(db, "products"), (doc) => {
-      const docs: any = [];
-      doc.forEach((d: any) => {
-        docs.unshift({ ...d.data(), id: d.id });
-      });
-      setProducts(docs);
+    const storeRef = doc(db, "stores", "0000001");
+    const storeProductsRef = collection(storeRef, "products");
+
+    const querySnapshot = await getDocs(storeProductsRef);
+    const docs: any = [];
+    querySnapshot.forEach((doc) => {
+      docs.push({ ...doc.data(), id: doc.id });
     });
+    setProducts(docs);
   } catch (err) {
     console.error(err);
     setProducts([]);
   }
 };
 
-export const deleteProduct = async (id: string, name: string) => {
+// Delete a product from a store
+export const deleteProduct = async (
+  productId: string,
+  productName: string
+) => {
   try {
-    await deleteDoc(doc(db, "products", id));
-    successMessage(`${name} deleted 🎉`);
+    const storeRef = doc(db, "stores", "0000001");
+    const productRef = doc(storeRef, "products", productId);
+
+    await deleteDoc(productRef);
+    successMessage(`${productName} deleted from store 🎉`);
   } catch (err) {
     errorMessage("Encountered an error ❌");
-    console.log(err);
+    console.error(err);
   }
 };
 

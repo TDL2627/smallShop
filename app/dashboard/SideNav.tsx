@@ -26,10 +26,7 @@ export default function SideNav() {
                      <Link href="/products" className="text-[#9AA8BD] hover:text-white">Products</Link>
                 </div>
 
-                 <div className="w-full flex items-center">
-                      <MdCategory className="text-[#9AA8BD] hover:text-white mr-2"/>
-                     <Link href="/categories" className="text-[#9AA8BD] hover:text-white">Categories</Link>
-                </div>
+                
 
                   <div className="w-full flex items-center">
                       <BsPersonFillLock className="text-[#9AA8BD] hover:text-white mr-2"/>
