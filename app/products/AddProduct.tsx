@@ -41,8 +41,10 @@ const AddProduct = (payload: any) => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     addProduct(title, price, category, quantity);
-
     toggle();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   const handlePrice = (event: React.ChangeEvent<HTMLInputElement>) => {

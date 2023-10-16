@@ -179,6 +179,9 @@ export default function Home() {
                           );
                           if (shouldDelete) {
                             deleteProduct(product.id, product.name);
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1500);
                           }
                         }}
                       />

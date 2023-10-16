@@ -17,7 +17,7 @@ const EditProduct = (payload: any) => {
   const [user, setUser] = useState<User>();
   const router = useRouter();
   const [price, setPrice] = useState<string>(product.price);
-  const [quantity, setQuantity] = useState<number>(product.quantity);
+  const [quantity, setQuantity] = useState<any>(product.quantity);
   const [title, setTitle] = useState<string>(product.name);
 
   const [category, setCategory] = useState<string>(product.category);
@@ -42,6 +42,9 @@ const EditProduct = (payload: any) => {
     e.preventDefault();
     editProduct(title, price, category, quantity, product.id);
     toggle();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   };
 
   const handlePrice = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -243,21 +243,21 @@ export const addProduct = async (
       quantity,
     };
 
-    await setDoc(storeProductsRef, productData);
+    await addDoc(storeProductsRef, productData);
     successMessage(`${productName} product added to store! 🎉`);
   } catch (err) {
     errorMessage("Error! ❌");
-    console.error(err);
+    console.error(err,"aye error");
   }
 };
 
 // Edit a product within a store
 export const editProduct = async (
-  productId: string,
   productName: string,
   price: string,
   category: string,
-  quantity: number
+  quantity: string,
+  productId: string,
 ) => {
   try {
     const storeRef = doc(db, "stores", "0000001");
