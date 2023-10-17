@@ -90,7 +90,7 @@ export default function Till() {
   const router = useRouter()
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen overflow-y-scroll pb-10">
       <h2 className="text-5xl font-bold text-center py-8">Till</h2>
       <Link href="/" className="text-red-500 fixed top-2 right-2" onClick={() => LogOut(router)}>Log out</Link>
 
