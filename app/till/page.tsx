@@ -2,7 +2,7 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getProducts } from "@/utils";
+import { getProducts , LogOut} from "@/utils";
 import { useProductStore } from "../store";
 export default function Till() {
   const [total, setTotal] = useState(0);
@@ -87,9 +87,13 @@ export default function Till() {
     );
     setTotal(newTotal);
   }, [cart]);
+  const router = useRouter()
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <h2 className="text-5xl font-bold text-center py-8">Till</h2>
+      <Link href="/" className="text-red-500 fixed top-2 right-2" onClick={() => LogOut(router)}>Log out</Link>
+
       <div className="container mx-auto grid lg:grid-cols-2 gap-4 px-4 pt-10">
         <div className="lg:block sticky top-10">
           <h3 className="text-xl font-semibold mb-2">Product Search:</h3>
