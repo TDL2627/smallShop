@@ -2,7 +2,7 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getProducts, LogOut } from "@/utils";
+import { getProducts, LogOut, newSale } from "@/utils";
 import { useProductStore } from "../store";
 export default function Till() {
   const [total, setTotal] = useState(0);
@@ -47,16 +47,13 @@ export default function Till() {
 
   const handleCheckout = () => {
     // Implement your payment processing logic here
-    console.log("Processing payment...");
-    console.log("Selected payment method:", paymentMethod);
-    console.log("Total amount:", total);
-
-    if (paymentMethod === "cash") {
-      console.log("Cash Paid:", Number(cashPaid).toFixed(2));
-      console.log("Change:", calculateChange().toFixed(2));
-    }
-
-    console.log("Cart items:", cart);
+    console.log("aye Selected payment method:", paymentMethod);
+    console.log(" aye Total amount:", total);
+    console.log("aye Cart items:", cart);
+    newSale(cart, total);
+    setCart([])
+    setTotal(0)
+    setCashPaid(0)
   };
   const handleSearchInputChange = (e: any) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -85,7 +82,6 @@ export default function Till() {
   }, [searchInput]);
 
   useEffect(() => {
-    // Recalculate the total based on the updated quantities
     const newTotal = cart.reduce(
       (acc: any, item: any) => acc + item.price * item.selectedQuantity,
       0
@@ -99,7 +95,7 @@ export default function Till() {
     console.log(cart, " cash cart");
     if (
       cashPaid !== 0 &&
-      typeof cashPaid !== 'string' &&
+      typeof cashPaid !== "string" &&
       cart.length > 0 &&
       cashPaid >= total
     ) {
@@ -110,7 +106,7 @@ export default function Till() {
   }, [cashPaid, total, cart]);
   return (
     <div className="bg-gray-100 min-h-screen overflow-y-scroll pb-10">
-      <h2 className="text-5xl font-bold text-center py-8">Till</h2>
+      <h2 className="text-5xl font-bold text-center py-8">Small Shop</h2>
       <Link
         href="/"
         className="text-red-500 fixed top-2 right-2"
