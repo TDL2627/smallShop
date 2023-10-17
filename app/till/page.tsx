@@ -2,15 +2,16 @@
 import React, { FormEventHandler, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getProducts , LogOut} from "@/utils";
+import { getProducts, LogOut } from "@/utils";
 import { useProductStore } from "../store";
 export default function Till() {
   const [total, setTotal] = useState(0);
   const [cart, setCart] = useState<any>([]);
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [cashPaid, setCashPaid] = useState(0);
+  const [cashPaid, setCashPaid] = useState<any>(0);
   const [searchInput, setSearchInput] = useState("");
   const { products, setProducts } = useProductStore();
+  const [readyCheckout, setReadyCheckout] = useState(false);
   useEffect(() => {
     getProducts(setProducts);
   }, []);
@@ -33,7 +34,11 @@ export default function Till() {
   };
 
   const handleCashPaidChange = (e: any) => {
-    setCashPaid(parseFloat(e.target.value));
+    if (e.target.value == "") {
+      setCashPaid("");
+    } else {
+      setCashPaid(parseFloat(e.target.value));
+    }
   };
 
   const calculateChange = () => {
@@ -87,12 +92,32 @@ export default function Till() {
     );
     setTotal(newTotal);
   }, [cart]);
-  const router = useRouter()
-
+  const router = useRouter();
+  useEffect(() => {
+    console.log(cashPaid, " cash");
+    console.log(total, " cash tot");
+    console.log(cart, " cash cart");
+    if (
+      cashPaid !== 0 &&
+      typeof cashPaid !== 'string' &&
+      cart.length > 0 &&
+      cashPaid >= total
+    ) {
+      setReadyCheckout(false);
+    } else {
+      setReadyCheckout(true);
+    }
+  }, [cashPaid, total, cart]);
   return (
     <div className="bg-gray-100 min-h-screen overflow-y-scroll pb-10">
       <h2 className="text-5xl font-bold text-center py-8">Till</h2>
-      <Link href="/" className="text-red-500 fixed top-2 right-2" onClick={() => LogOut(router)}>Log out</Link>
+      <Link
+        href="/"
+        className="text-red-500 fixed top-2 right-2"
+        onClick={() => LogOut(router)}
+      >
+        Log out
+      </Link>
 
       <div className="container mx-auto grid lg:grid-cols-2 gap-4 px-4 pt-10">
         <div className="lg:block sticky top-10">
@@ -197,8 +222,10 @@ export default function Till() {
             )}
             <button
               onClick={handleCheckout}
-              disabled={cashPaid == 0}
-              className={` ${cashPaid == 0 ? "bg-gray-500":"bg-green-500"} text-white px-4 py-2 rounded `}
+              disabled={readyCheckout}
+              className={` ${
+                !readyCheckout ? "bg-green-500" : " bg-gray-500"
+              } text-white px-4 py-2 rounded `}
             >
               Checkout
             </button>
