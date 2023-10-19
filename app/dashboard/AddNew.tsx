@@ -2,7 +2,7 @@ import { AiFillCloseCircle } from "react-icons/ai"
 import { MdDeleteForever } from "react-icons/md"
 import { IoMdAddCircle } from "react-icons/io"
 import React, { FormEventHandler, useState, ChangeEvent } from "react"
-import { addSales, Items, Product, calculateTotalAmount } from "@/utils"
+import {  Items, Product, calculateTotalAmount } from "@/utils"
 
 interface Props {
     setAddNew: any
@@ -54,7 +54,7 @@ export default function AddNew({ setAddNew, productsArray }: Props) {
 
    const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
-       addSales(customerName, customerEmail, products, totalAmount, setAddNew)
+    //    addSales(customerName, customerEmail, products, totalAmount, setAddNew)
    }
 
 
