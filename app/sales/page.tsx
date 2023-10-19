@@ -79,7 +79,7 @@ export default function Sales() {
         </section>
 
         <div>
-          {sales.map((sale: Sales, index: any) => (
+          {sales.map((sale: any, index: any) => (
             <div
               className="w-full my-3 cursor-pointer"
               key={sale.id}
@@ -102,32 +102,23 @@ export default function Sales() {
               </div>
               <Collapse isOpened={clicked === index}>
                 <div className="min-h-[200px] w-full bg-white py-4 flex flex-col space-y-2 px-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <p className="text-sm text-gray-500">
-                      Customer: {sale.customerName}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Email Address: {sale?.customerEmail || "NA"}
-                    </p>
-                  </div>
-
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm">Products</p>
                       <ul className="text-sm text-gray-500">
-                        {sale.products.map((item, index) => (
+                        {sale.products.map((item: any, index: number) => (
                           <li key={index}>
-                            - {item.name}= {item.quantity} pieces == (R
-                            {item.amount})
+                            {item.name} - {item.selectedQuantity} pieces == (R{" "}
+                            {item.price})
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div>
-                      <h1 className="text-3xl font-bold text-blue-800">
-                        R{sale.totalAmount.toLocaleString()}
-                      </h1>
-                    </div>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold text-blue-800">
+                      R{sale.totalAmount.toLocaleString()}
+                    </h1>
                   </div>
                 </div>
               </Collapse>
