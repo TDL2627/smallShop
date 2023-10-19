@@ -255,7 +255,7 @@ export const editProduct = async (
   productName: string,
   price: string,
   category: string,
-  quantity: string,
+  quantity: number,
   productId: string
 ) => {
   try {
@@ -309,7 +309,7 @@ export const deleteProduct = async (productId: string, productName: string) => {
   }
 };
 
-export const newSale = async (products: Items[], totalAmount: number) => {
+export const newSale = async (products: any, totalAmount: number) => {
   try {
     const storeRef = doc(db, "stores", "0000001");
     const storeSalesRef: any = collection(storeRef, "sales");
@@ -321,6 +321,21 @@ export const newSale = async (products: Items[], totalAmount: number) => {
     };
 
     await addDoc(storeSalesRef, saleData);
+    products.forEach(async (product: any) => {
+      const newQuantity: number = product.quantity - product.selectedQuantity;
+      const storeRef = doc(db, "stores", "0000001");
+      const productRef = doc(storeRef, "products", product.id);
+
+      const productData = {
+        name: product.name,
+        price: product.price,
+        category: product.category,
+        quantity: newQuantity,
+        id: product.id,
+      };
+
+      await setDoc(productRef, productData);
+    });
 
     successMessage("Sale successfull 🎉");
   } catch (err) {
