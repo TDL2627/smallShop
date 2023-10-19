@@ -108,8 +108,8 @@ export default function Sales() {
                       <ul className="text-sm text-gray-500">
                         {sale.products.map((item: any, index: number) => (
                           <li key={index}>
-                            {item.name} - {item.selectedQuantity} pieces == (R{" "}
-                            {item.price})
+                            {item.name} <span className="text-blue-500">({item.selectedQuantity})</span>-R{" "}
+                            {item.price}
                           </li>
                         ))}
                       </ul>
